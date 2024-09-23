@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String               @id
+  email    String
+  username String
+  groups   UsersInCooperation[]
+}
+
+model Cooperation {
+  id          String               @id
+  name        String
+  group_users UsersInCooperation[]
+}
+
+model UsersInCooperation {
+  cooperation_id String
+  user_id        String
+  owner_right    Boolean     @default(false)
+  assignedAt     DateTime    @default(now())
+  assignedBy     String
+  cooperation    Cooperation @relation(fields: [cooperation_id], references: [id])
+  user           User        @relation(fields: [user_id], references: [id])
+
+  @@id([cooperation_id, user_id])
+}
