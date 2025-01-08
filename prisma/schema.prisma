@@ -12,6 +12,7 @@ model User {
   email    String
   username String
   groups   UsersInCooperation[]
+  tasks    Task[]
 }
 
 model Cooperation {
@@ -30,4 +31,14 @@ model UsersInCooperation {
   user           User        @relation(fields: [user_id], references: [id])
 
   @@id([cooperation_id, user_id])
+}
+
+model Task {
+  id             String      @id
+  name           String
+  user_id        String
+  user           User        @relation(fields: [user_id], references: [id])
+  status         Boolean     @default(false)
+  priority       Int      @default(3)
+  time_consuming Int      @default(0)
 }
